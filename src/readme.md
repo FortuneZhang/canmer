@@ -4,4 +4,4 @@
 4.android 尽量使用dp  字体使用sp 不要使用px
 5.relative 必须知道大小
 6.必须是加 .9.png 有- 可以拉伸
-7.
+7.抽取变量 ctrl + alt + c1
