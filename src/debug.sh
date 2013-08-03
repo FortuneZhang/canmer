@@ -3,12 +3,12 @@ echo 'auto'
 
 adb clean
 
-adb uninstall com.learn.demo02
+adb uninstall com.learn.canmer
 
 ant debug
 
-adb install -r bin/demo02-debug.apk
+adb install -r bin/canmer-debug.apk
 
-adb shell am start -n com.learn.demo02/com.learn.demo02.MainActivity
+adb shell am start -n com.learn.canmer/com.learn.canmer.MainActivity
 
 echo 'activtiy running'
