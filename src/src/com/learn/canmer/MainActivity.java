@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import com.learn.utils.ImageUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -54,6 +57,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CODE && data == null) {
             //返回的是缩略图
             Bitmap bitmap = (Bitmap) ImageUtils.decodeBitmapFromFile(allImgPath, 500, 500);
+            saveImg(bitmap, thumbImgPath);
 
 //            Bundle extras =  data.getExtras();
 //            Bitmap bitmap = (Bitmap) extras.get("data");
@@ -61,6 +65,20 @@ public class MainActivity extends Activity {
 
         }
 
+    }
+
+    private void saveImg(Bitmap img, String path) {
+        File file = new File(path);
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            img.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -75,14 +93,14 @@ public class MainActivity extends Activity {
         try {
             String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
             String imageFileName = "my_img" + timeStamp;
-            File allImg = new File(albumDir, imageFileName + " .jpeg");
+            File allImg = new File(albumDir, imageFileName + ".jpeg");
             File thumbImg = new File(albumDir, imageFileName + "thumb" + ".jpeg");
 
             allImgPath = allImg.getAbsolutePath();
             thumbImgPath = thumbImg.getAbsolutePath();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
