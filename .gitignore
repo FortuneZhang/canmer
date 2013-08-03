@@ -3,4 +3,6 @@ gen
 .eclipse
 .setting
 bin
-.idea
+.idea 
+.out 
+*.out
