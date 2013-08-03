@@ -4,5 +4,4 @@ gen
 .setting
 bin
 .idea 
-.out 
-*.out
+out
