@@ -9,8 +9,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.learn.db.DbOperator;
 import com.learn.utils.ImageUtils;
 
 import java.io.File;
@@ -24,6 +27,9 @@ public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE = 1000;
     private Button btnStartCamera;
+    private Button btnSaveCamera;
+    private EditText description;
+
     private ImageView imageView;
     private File albumDir;
     private String allImgPath;
@@ -47,6 +53,39 @@ public class MainActivity extends Activity {
                 startCamera();
             }
         });
+        btnSaveCamera = (Button) findViewById(R.id.btn_save_camera);
+        btnSaveCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save();
+            }
+        });
+
+        description = (EditText) findViewById(R.id.description_edit_text);
+    }
+
+
+    private void save() {
+        DbOperator dbOperator = new DbOperator(this);
+        Long state = dbOperator.saveItem(getDescription(), allImgPath, thumbImgPath);
+        if (-1 == state) {
+            Toast.makeText(this, "保存失败", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private String getDescription() {
+        String str = null;
+        try {
+            str = description.getText().toString();
+        } catch (NullPointerException e) {
+            str = "您没有输入任何数据";
+        }
+        return str;
+
     }
 
     @Override

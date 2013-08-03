@@ -5,4 +5,15 @@
 5.relative 必须知道大小
 6.必须是加 .9.png 有- 可以拉伸
 7.抽取变量 ctrl + alt + c
-8.
+8. ViewGroup:LinearLayout(oritentation,gravity) RelativeLayout(toRightOf,AlignParentLeft)
+  TextView EditText,ImmageView LayoutWidth layoutHeight
+  (xx)findViewById();
+  startActivtiy()
+  startActivityForResult()
+
+  Intent(意图，目的)  intentFilter android会去找
+
+  Write File
+     权限 ,file操作 Environment.getExternalStorageDirectory
+  Sqlite3
+    oncreate onUpgrage
