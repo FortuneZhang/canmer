@@ -4,20 +4,27 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class MainActivity extends Activity
-{
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE = 1000;
     private Button btnStartCamera;
-    private ImageView imageView ;
+    private ImageView imageView;
+    private File albumDir;
+    private String allImgPath;
+    private String thumbImgPath;
+
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initUi();
@@ -35,36 +42,16 @@ public class MainActivity extends Activity
         });
     }
 
-    /**
-     * Called when an activity you launched exits, giving you the requestCode
-     * you started it with, the resultCode it returned, and any additional
-     * data from it.  The <var>resultCode</var> will be
-     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
-     * didn't return any result, or crashed during its operation.
-     * <p/>
-     * <p>You will receive this call immediately before onResume() when your
-     * activity is re-starting.
-     *
-     * @param requestCode The integer request code originally supplied to
-     *                    startActivityForResult(), allowing you to identify who this
-     *                    result came from.
-     * @param resultCode  The integer result code returned by the child activity
-     *                    through its setResult().
-     * @param data        An Intent, which can return result data to the caller
-     *                    (various data can be attached to Intent "extras").
-     * @see #startActivityForResult
-     * @see #createPendingResult
-     * @see #setResult(int)
-     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
             return;
         }
         if (requestCode == REQUEST_CODE && data != null) {
-            Bundle extras =  data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(bitmap);
+            //返回的是缩略图
+//            Bundle extras =  data.getExtras();
+//            Bitmap bitmap = (Bitmap) extras.get("data");
+//            imageView.setImageBitmap(bitmap);
 
         }
 
@@ -72,7 +59,32 @@ public class MainActivity extends Activity
 
 
     private void startCamera() {
+        createImageFile();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, "c://images/temp.jpg");
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    private void createImageFile() {
+        try {
+            String timeStamp = new SimpleDateFormat("yyyyMMDD_HHmmss").format(new Date());
+            String imageFileName = "my_img" + timeStamp;
+            File allImg = new File(albumDir, imageFileName + " .jpeg");
+            File thumbImg = new File(albumDir, imageFileName + "thumb" + ".jpeg");
+            
+            allImgPath = allImg.getAbsolutePath();
+            thumbImgPath = thumbImg.getAbsolutePath();
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void initImagePath() {
+        albumDir = new File(Environment.getExternalStorageDirectory() + File.separator + "save_my_img");
+        if (!albumDir.exists()) {
+            albumDir.mkdirs();
+        }
+
     }
 }
