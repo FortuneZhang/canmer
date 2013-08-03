@@ -3,12 +3,15 @@ package com.learn.canmer;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import com.learn.utils.ImageUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,6 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initUi();
+        initImagePath();
     }
 
     private void initUi() {
@@ -47,11 +51,13 @@ public class MainActivity extends Activity {
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_CODE && data != null) {
+        if (requestCode == REQUEST_CODE && data == null) {
             //返回的是缩略图
+            Bitmap bitmap = (Bitmap) ImageUtils.decodeBitmapFromFile(allImgPath, 500, 500);
+
 //            Bundle extras =  data.getExtras();
 //            Bitmap bitmap = (Bitmap) extras.get("data");
-//            imageView.setImageBitmap(bitmap);
+            imageView.setImageBitmap(bitmap);
 
         }
 
@@ -61,7 +67,7 @@ public class MainActivity extends Activity {
     private void startCamera() {
         createImageFile();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, "c://images/temp.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(allImgPath)));
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -71,7 +77,7 @@ public class MainActivity extends Activity {
             String imageFileName = "my_img" + timeStamp;
             File allImg = new File(albumDir, imageFileName + " .jpeg");
             File thumbImg = new File(albumDir, imageFileName + "thumb" + ".jpeg");
-            
+
             allImgPath = allImg.getAbsolutePath();
             thumbImgPath = thumbImg.getAbsolutePath();
 
